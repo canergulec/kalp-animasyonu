@@ -3,140 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sana Bir Sorum Var!</title>
+    <title>Benimle Çıkar Mısın?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <style>
         body {
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: #ffe6e6; /* Tatlı bir pembe arka plan */
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ffd1dc 0%, #ffb6c1 100%);
+            font-family: 'Quicksand', sans-serif;
             overflow: hidden;
         }
-        #container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+
+        #ana-kapsayici {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
+            text-align: center;
+            max-width: 600px;
             z-index: 10;
+            position: relative;
         }
+
         h1 {
-            color: #ff4d4d;
-            font-size: 2.5em;
-            margin-bottom: 30px;
-            transition: 0.3s;
+            font-family: 'Dancing Script', cursive;
+            color: #d81b60;
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
-        .buttons {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-            justify-content: center;
-        }
-        button {
-            padding: 10px 20px;
+
+        .alt-metin {
+            color: #880e4f;
             font-size: 1.2em;
-            cursor: pointer;
+            margin-bottom: 30px;
+        }
+
+        .buton-grubu {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            min-height: 100px; /* Butonlar büyüdüğünde layout kaymasın diye */
+        }
+
+        button {
             border: none;
-            border-radius: 10px;
-            transition: 0.2s;
-            font-weight: bold;
+            border-radius: 50px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            font-size: 1.2em;
+            padding: 15px 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
+
         #evetBtn {
-            background-color: #4CAF50;
+            background-color: #e91e63;
             color: white;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
+
         #evetBtn:hover {
-            background-color: #45a049;
+            background-color: #c2185b;
+            transform: scale(1.05);
         }
+
         #hayirBtn {
-            background-color: #f44336;
-            color: white;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background-color: #f8bbd0;
+            color: #880e4f;
+            position: relative;
         }
-        #hayirBtn:hover {
-            background-color: #d32f2f;
-        }
-        .heart-container {
+
+        #sonuc-ekrani {
             display: none;
             flex-direction: column;
             align-items: center;
         }
-        .heart {
-            color: #ff4d4d;
-            font-size: 120px;
-            animation: heartbeat 1s infinite alternate;
+
+        .buyuk-kalp {
+            font-size: 100px;
+            color: #e91e63;
+            animation: kalpAtisi 1s infinite alternate;
             margin-bottom: 20px;
         }
-        .success-text {
-            color: #ff4d4d;
-            font-size: 2em;
-            font-weight: bold;
+
+        .mesaj {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3em;
+            color: #d81b60;
         }
-        @keyframes heartbeat {
-            from { transform: scale(1); }
-            to { transform: scale(1.2); }
+
+        @keyframes kalpAtisi {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.2); }
+        }
+
+        /* Yağan kalpler için CSS */
+        .kucuk-kalp {
+            position: absolute;
+            color: #e91e63;
+            font-size: 24px;
+            animation: asagiDus 4s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes asagiDus {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
-<div id="container">
-    <h1 id="soru">Benimle çıkar mısın? 🥺</h1>
-    <div class="buttons" id="butonlar">
-        <button id="evetBtn" onclick="evet()">Evet</button>
-        <button id="hayirBtn" onclick="hayir()">Hayır</button>
-    </div>
-    
-    <div class="heart-container" id="kalpAnimasyonu">
-        <div class="heart">❤️</div>
-        <div class="success-text">Yaa, biliyordum! 😍</div>
-    </div>
-</div>
+    <!-- Yağan kalplerin olacağı arka plan -->
+    <div id="kalp-yagmuru"></div>
 
-<script>
-    // Hayır'a basıldıkça çıkacak esprili metinler
-    const alternatifSorular = [
-        "Emin misin?",
-        "Bir daha düşün bence...",
-        "Lütfen! 🥺",
-        "Yapma böyle...",
-        "Şansını zorluyorsun bak...",
-        "Evet'e basmak o kadar zor olmamalı!",
-        "İnat etme artık!",
-        "Mecbur evet diyeceksin!"
-    ];
-    
-    let soruIndex = 0;
-    let evetBoyut = 1.2;
+    <div id="ana-kapsayici">
+        <div id="soru-ekrani">
+            <h1 id="soru-baslik">Benimle çıkar mısın? 🌹</h1>
+            <p class="alt-metin" id="alt-metin">Dünyanın en güzel evet'ini bekliyorum...</p>
+            
+            <div class="buton-grubu">
+                <button id="evetBtn" onclick="evetDedi()">EVET!</button>
+                <button id="hayirBtn" onmouseover="kacButonKac()" onclick="kacButonKac()">Hayır</button>
+            </div>
+        </div>
 
-    function hayir() {
-        // Soruyu sıradaki esprili metinle değiştir
-        document.getElementById("soru").innerText = alternatifSorular[soruIndex];
+        <div id="sonuc-ekrani">
+            <div class="buyuk-kalp">💖</div>
+            <div class="mesaj">Yaa, biliyordum! Seni çok seviyorum... 🥰</div>
+        </div>
+    </div>
+
+    <script>
+        const hayirMetinleri = [
+            "Emin misin?",
+            "Bir daha düşün bence...",
+            "Lütfen! 🥺",
+            "Ama çok güzel olurduk...",
+            "Kalbimi kırıyorsun...",
+            "Şansını zorlama bence...",
+            "Evet'e basmak çok mu zor?",
+            "İnat etme artık!",
+            "Mecbur evet diyeceksin!"
+        ];
         
-        // Eğer dizinin sonuna gelindiyse son soruda kalsın diye kontrol
-        if (soruIndex < alternatifSorular.length - 1) {
-            soruIndex++;
+        let tiklamaSayisi = 0;
+        let evetBoyutu = 1;
+
+        function kacButonKac() {
+            const hayirBtn = document.getElementById("hayirBtn");
+            const evetBtn = document.getElementById("evetBtn");
+            const altMetin = document.getElementById("alt-metin");
+
+            // Metni değiştir
+            hayirBtn.innerText = hayirMetinleri[Math.min(tiklamaSayisi, hayirMetinleri.length - 1)];
+            altMetin.innerText = "Bakalım nereye kadar hayır diyeceksin... 🧐";
+
+            // Hayır butonunu kaçır
+            const x = Math.random() * (window.innerWidth - hayirBtn.offsetWidth) - (window.innerWidth/2) + 100;
+            const y = Math.random() * (window.innerHeight - hayirBtn.offsetHeight) - (window.innerHeight/2) + 100;
+            
+            hayirBtn.style.position = "absolute";
+            hayirBtn.style.left = `${Math.abs(x)}px`;
+            hayirBtn.style.top = `${Math.abs(y)}px`;
+
+            // Evet butonunu devasa yap
+            evetBoyutu += 0.5;
+            evetBtn.style.transform = `scale(${evetBoyutu})`;
+            
+            tiklamaSayisi++;
         }
 
-        // Evet butonunu her Hayır'a basıldığında biraz daha büyüt
-        evetBoyut += 0.4;
-        const evetBtn = document.getElementById("evetBtn");
-        evetBtn.style.fontSize = evetBoyut + "em";
-        evetBtn.style.padding = (evetBoyut * 8) + "px " + (evetBoyut * 15) + "px";
-    }
+        function evetDedi() {
+            document.getElementById("soru-ekrani").style.display = "none";
+            document.getElementById("sonuc-ekrani").style.display = "flex";
+            kalpYagdir();
+        }
 
-    function evet() {
-        // Butonları ve soruyu gizle, kalp animasyonunu göster
-        document.getElementById("butonlar").style.display = "none";
-        document.getElementById("soru").style.display = "none";
-        
-        const kalpAnimasyonu = document.getElementById("kalpAnimasyonu");
-        kalpAnimasyonu.style.display = "flex";
-    }
-</script>
+        function kalpYagdir() {
+            const kalpYagmuru = document.getElementById("kalp-yagmuru");
+            const kalpler = ['💖', '💕', '💘', '💗', '💓', '💞'];
 
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const kalp = document.createElement("div");
+                    kalp.classList.add("kucuk-kalp");
+                    kalp.innerText = kalpler[Math.floor(Math.random() * kalpler.length)];
+                    kalp.style.left = Math.random() * 100 + "vw";
+                    kalp.style.animationDuration = (Math.random() * 3 + 2) + "s";
+                    kalpYagmuru.appendChild(kalp);
+                }, i * 100);
+            }
+        }
+    </script>
 </body>
 </html>
